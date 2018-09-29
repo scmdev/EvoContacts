@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EvoContacts.Infrastructure.Migrations
 {
     [DbContext(typeof(EvoContactsDbContext))]
-    [Migration("20180929060225_001_Create_database")]
-    partial class _001_Create_database
+    [Migration("20180929060225_SM_Create_database")]
+    partial class _SM_Create_database
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

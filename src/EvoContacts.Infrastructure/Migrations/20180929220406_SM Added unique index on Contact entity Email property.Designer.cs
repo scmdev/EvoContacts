@@ -4,14 +4,16 @@ using EvoContacts.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EvoContacts.Infrastructure.Migrations
 {
     [DbContext(typeof(EvoContactsDbContext))]
-    partial class EvoContactsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180929220406_SM Added unique index on Contact entity Email property")]
+    partial class SMAddeduniqueindexonContactentityEmailproperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

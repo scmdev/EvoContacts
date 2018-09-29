@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EvoContacts.Infrastructure.Migrations
 {
-    public partial class _001_Create_database : Migration
+    public partial class _SM_Create_database : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
