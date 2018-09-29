@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvoContacts.ApplicationCore", "EvoContacts.ApplicationCore\EvoContacts.ApplicationCore.csproj", "{8958FC4F-5E1B-463A-9629-AEBD3F0E35B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvoContacts.ApplicationCore", "src\EvoContacts.ApplicationCore\EvoContacts.ApplicationCore.csproj", "{8958FC4F-5E1B-463A-9629-AEBD3F0E35B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvoContacts.Infrastructure", "EvoContacts.Infrastructure\EvoContacts.Infrastructure.csproj", "{1F35F1A4-9ADC-40E6-A8A4-A7A85D7DAB01}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvoContacts.Infrastructure", "src\EvoContacts.Infrastructure\EvoContacts.Infrastructure.csproj", "{1F35F1A4-9ADC-40E6-A8A4-A7A85D7DAB01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvoContacts.API", "EvoContacts.API\EvoContacts.API.csproj", "{E9D5A315-125B-479A-9019-A81B7A3D8D03}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvoContacts.API", "src\EvoContacts.API\EvoContacts.API.csproj", "{E9D5A315-125B-479A-9019-A81B7A3D8D03}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{44034D8C-1B75-4D2E-AD3B-10A883401C33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +32,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8958FC4F-5E1B-463A-9629-AEBD3F0E35B3} = {44034D8C-1B75-4D2E-AD3B-10A883401C33}
+		{1F35F1A4-9ADC-40E6-A8A4-A7A85D7DAB01} = {44034D8C-1B75-4D2E-AD3B-10A883401C33}
+		{E9D5A315-125B-479A-9019-A81B7A3D8D03} = {44034D8C-1B75-4D2E-AD3B-10A883401C33}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {93A2197D-1796-47A0-9339-18E5BB1F6F4C}
