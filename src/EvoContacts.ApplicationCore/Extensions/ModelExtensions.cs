@@ -9,7 +9,7 @@ namespace EvoContacts.ApplicationCore.Extensions
     public static class ModelExtensions
     {
         /// <summary>
-        /// Compares values of all updateModel properties to entity properties and updates entity properties as needed
+        /// Compares values of all UpdateModel properties and updates Entity properties as necessary
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="updateModel"></param>

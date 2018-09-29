@@ -53,15 +53,14 @@ namespace EvoContacts.ApplicationCore.Services
             {
                 var contactEntitiesPagedList = await _contactRepository.GetPagedListAsync(page: page, pageSize: pageSize);
 
-                var contactsPagedList = new Models.PagedListResult<Models.Contact>(page, pageSize)
+                //Map Models.PagedListResult<Entities.Contact> to Models.PagedListResult<Models.Contact>
+                result = new Models.PagedListResult<Models.Contact>(page, pageSize)
                 {
                     Items = _mapper.Map<List<Models.Contact>>(contactEntitiesPagedList.Items),
                     Page = contactEntitiesPagedList.Page,
                     PageSize = contactEntitiesPagedList.PageSize,
                     TotalRecords = contactEntitiesPagedList.TotalRecords
                 };
-
-                result = contactsPagedList;
             }
             catch (Exception e)
             {
@@ -81,7 +80,7 @@ namespace EvoContacts.ApplicationCore.Services
 
                 if (contactEntity == null)
                 {
-                    return result;
+                    return result; //result.Data = null => controller will return 404
                 }
 
                 result.Data = _mapper.Map<Models.Contact>(contactEntity);
@@ -103,13 +102,22 @@ namespace EvoContacts.ApplicationCore.Services
                 //TBC: Must add ClaimUser claimUser
                 var createdUserId = Guid.NewGuid(); //var createdUserId = claimUser.UserId;
 
+                //check Contact with same Email does not already exist
+                var checkEmailEntity = await _contactRepository.GetSingleAsync(x => x.Email == contactCreate.Email);
+
+                if (checkEmailEntity != null)
+                {
+                    result.ErrorMessage = ERROR_CREATE_CONTACT_DUPLICATE_EMAIL;
+                    return result;
+                }
+
                 contactCreate.CreatedUserId = createdUserId;
 
+                //Create new contactEntity by mapping contactCreate to Entities.Contact
                 var contactEntity = _mapper.Map<Entities.Contact>(contactCreate);
 
+                //Add contactEntity
                 await _contactRepository.AddAsync(contactEntity);
-
-                contactEntity = await _contactRepository.GetByIdAsync(contactEntity.Id);
 
                 result.Data = _mapper.Map<Models.Contact>(contactEntity);
             }
@@ -130,20 +138,30 @@ namespace EvoContacts.ApplicationCore.Services
                 //TBC: Must add ClaimUser claimUser
                 var updatedUserId = Guid.NewGuid(); //var createdUserId = claimUser.UserId;
 
-                //use GetSingleAsync to avoid tracking
+                //check Contact with same Email does not already exist
+                var checkEmailEntity = await _contactRepository.GetSingleAsync(x => x.Email == contactUpdate.Email);
+
+                if (checkEmailEntity != null && checkEmailEntity.Id != contactUpdate.Id)
+                {
+                    result.ErrorMessage = ERROR_UPDATE_CONTACT_DUPLICATE_EMAIL;
+                    return result;
+                }
+
+                //Get contactEntity using GetSingleAsync to avoid tracking
                 var contactEntity = await _contactRepository.GetSingleAsync(x => x.Id == contactUpdate.Id);
 
                 if (contactEntity == null)
                 {
-                    result.Data = false;
+                    result.Data = false; //result.Data = false => controller will return 404
                     return result;
                 }
 
                 contactUpdate.UpdatedUserId = updatedUserId;
 
+                //Check/Update contactEntity properties as per contactUpdate provided
                 if (!contactUpdate.MapToEntity(ref contactEntity))
                 {
-                    result.ErrorMessage = MSG_ERROR_UPDATE_FAILED_NO_CHANGES_DETECTED;
+                    result.ErrorMessage = ERROR_UPDATE_CONTACT_NO_CHANGES_DETECTED;
                     return result;
                 }
 

@@ -23,9 +23,13 @@ namespace EvoContacts.API
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public IConfiguration Configuration { get; }
+
+        private readonly ILoggerFactory _loggerFactory;
+
+        public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            HostingEnvironment = env;
+            _loggerFactory = loggerFactory;
 
             var builder = new ConfigurationBuilder()
                              .SetBasePath(env.ContentRootPath)
@@ -35,10 +39,6 @@ namespace EvoContacts.API
 
             Configuration = builder.Build();
         }
-
-        public IConfiguration Configuration { get; }
-
-        public IHostingEnvironment HostingEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -70,6 +70,8 @@ namespace EvoContacts.API
             // Add MVC
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest); //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1); 
 
+            services.AddApplicationInsightsTelemetry(Configuration);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "EvoContacts.API", Version = "v1" });
@@ -79,6 +81,10 @@ namespace EvoContacts.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            _loggerFactory.AddApplicationInsights(app.ApplicationServices, LogLevel.Error);
+            //_loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            //_loggerFactory.AddDebug();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

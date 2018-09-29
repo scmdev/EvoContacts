@@ -19,6 +19,12 @@ namespace EvoContacts.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            #region ADD UNIQUE INDEXES
+
+            modelBuilder.Entity<Contact>().HasIndex(x => new { x.Email }).HasFilter("[Email] IS NOT NULL AND IsDeleted = 0").IsUnique();
+
+            #endregion
         }
 
     }

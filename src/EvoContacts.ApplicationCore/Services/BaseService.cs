@@ -21,12 +21,16 @@ namespace EvoContacts.ApplicationCore.Services
         {
             _logger.LogError(e, message, args);
 
-            return MSG_ERROR_UNSPECIFIED;
+            return ERROR_UNSPECIFIED;
         }
 
-        public const string MSG_ERROR_UNSPECIFIED = "An error has occurred.";
+        public const string ERROR_UNSPECIFIED = "An error has occurred.";
 
-        public const string MSG_ERROR_UPDATE_FAILED_NO_CHANGES_DETECTED = "No changes detected.";
+        public const string ERROR_CREATE_CONTACT_DUPLICATE_EMAIL = "Create contact failed as a contact with this email already exists.";
+
+        public const string ERROR_UPDATE_CONTACT_DUPLICATE_EMAIL = "Update contact failed as another contact with this email already exists.";
+
+        public const string ERROR_UPDATE_CONTACT_NO_CHANGES_DETECTED = "Update contact failed as no changes were detected.";
 
     }
 }
