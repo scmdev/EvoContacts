@@ -50,8 +50,8 @@ namespace EvoContacts.API
 
         public void ConfigureLocalServices(IServiceCollection services)
         {
-            ConfigureProductionServices(services); // use real database
-            //ConfigureTestingServices(services); // use in-memory database
+            //ConfigureProductionServices(services); // use real database
+            ConfigureTestingServices(services); // use in-memory database
         }
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
@@ -90,8 +90,7 @@ namespace EvoContacts.API
 
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<IContactService, ContactService>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             services.AddSingleton(Configuration);
 
@@ -151,7 +150,16 @@ namespace EvoContacts.API
                 c.IncludeXmlComments(xmlPath);
                 c.DescribeAllEnumsAsStrings();
 
-                c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "header", Description = "Please enter JWT token as follows without quotations: \"Bearer {Token}\"", Name = "Authorization", Type = "apiKey" });
+                c.AddSecurityDefinition(
+                    "Bearer",
+                    new ApiKeyScheme
+                    {
+                        In = "header",
+                        Description = "Please enter JWT token without quotations as follows \"Bearer {Token}\"",
+                        Name = "Authorization",
+                        Type = "apiKey"
+                    }
+                    );
                 c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> { { "Bearer", Enumerable.Empty<string>() } });
             });
 

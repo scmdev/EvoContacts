@@ -25,7 +25,7 @@ namespace EvoContacts.API.Controllers
     /// </summary>
     [Authorize]
     [Produces("application/json")]
-    public class ContactsController : Controller
+    public class ContactsController : BaseController
     {
         private readonly IContactService _contactService;
         private readonly ILogger<ContactsController> _logger;
@@ -118,6 +118,8 @@ namespace EvoContacts.API.Controllers
                 return BadRequest(ModelState);
             }
 
+            contactCreate.CreatedUserId = _claimsUser.UserId;
+
             var contactResult = await _contactService.CreateContact(contactCreate);
 
             if (contactResult.RequestFailed)
@@ -160,6 +162,7 @@ namespace EvoContacts.API.Controllers
             }
 
             contactUpdate.Id = contactId;
+            contactUpdate.UpdatedUserId = _claimsUser.UserId;
 
             var updateResult = await _contactService.UpdateContact(contactUpdate);
 
@@ -201,6 +204,7 @@ namespace EvoContacts.API.Controllers
             }
 
             contactUpdateStatus.Id = contactId;
+            contactUpdateStatus.UpdatedUserId = _claimsUser.UserId;
 
             var updateStatusResult = await _contactService.UpdateContactStatus(contactUpdateStatus);
 
@@ -234,10 +238,7 @@ namespace EvoContacts.API.Controllers
         [ProducesResponseType(statusCode: 204)]
         public async Task<IActionResult> DeleteContact([FromRoute]Guid contactId)
         {
-            //TBC: Must add ClaimsUser claimsUser
-            var deletedUserId = Guid.NewGuid();
-
-            var deleteResult = await _contactService.DeleteContact(contactId, deletedUserId);
+            var deleteResult = await _contactService.DeleteContact(contactId, _claimsUser.UserId);
 
             if (deleteResult.RequestFailed)
             {

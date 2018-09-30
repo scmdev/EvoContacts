@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20180930164224_test.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\EvoContacts.ApplicationCore\EvoContacts.ApplicationCore.csproj" />
   </ItemGroup>
 

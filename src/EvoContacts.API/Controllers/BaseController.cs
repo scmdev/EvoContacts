@@ -7,22 +7,20 @@ namespace EvoContacts.API.Controllers
 {
     public class BaseController : Controller
     {
-        internal ClaimUser _claimUser
+        protected ClaimsUser _claimsUser
         {
             get
             {
-                if (!_isAccessToken)
-                    return null;
+                ClaimsUser claimsUser = null;
 
-                return JsonConvert.DeserializeObject<ClaimUser>(Request.HttpContext.User.Claims.First(x => x.Type == "ClaimUser")?.Value.ToString() ?? "");
-            }
-        }
+                var claim = Request.HttpContext.User.Claims.FirstOrDefault(x => x.Type == "ClaimsUser");
 
-        private bool _isAccessToken
-        {
-            get
-            {
-                return JsonConvert.DeserializeObject<bool>(Request.HttpContext.User.Claims.First(x => x.Type == "IsAccessToken")?.Value.ToString() ?? "false");
+                if (claim != null)
+                {
+                    claimsUser = JsonConvert.DeserializeObject<ClaimsUser>(claim.Value.ToString());
+                }
+
+                return claimsUser;
             }
         }
     }

@@ -3,7 +3,7 @@ using System;
 
 namespace ApplicationCore.Models
 {
-    public class ClaimUser
+    public class ClaimsUser
     {
         public Guid UserId { get; set; }
 
