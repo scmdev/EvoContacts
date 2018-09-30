@@ -180,23 +180,27 @@ namespace EvoContacts.IntegrationTests.Repositories
         [Fact]
         public async Task DeleteAsyncFunctioningCorrectly()
         {
-            var deleteEntity = _dbContext.Contacts.Where(x => !x.IsDeleted).Last();
+            //Must add a Contact directly to Contacts collection for use when checking DeleteAsync
+            var deleteEntity = new Contact
+            {
+                FirstName = "Mike",
+                LastName = "Magee",
+                Email = "mmagee@evocontacts.com",
+                PhoneNumber = "555-478-9856",
+                ContactStatus = ApplicationCore.Enums.ContactStatusEnum.ActiveEnum
+            };
+            _dbContext.Contacts.Add(deleteEntity);
+            _dbContext.SaveChanges();
 
             Assert.True(await _contactRepository.DeleteAsync(deleteEntity.Id));
 
-            var existingContacts = _dbContext.Contacts.Where(x => !x.IsDeleted).ToList();
+            var entityDeleted = await _dbContext.Contacts.FindAsync(deleteEntity.Id);
 
-            //Check deleteEntity still exists in Contacts collection
-            Assert.Contains(deleteEntity, _dbContext.Contacts);
+            Assert.NotNull(entityDeleted);
+            Assert.Equal(deleteEntity, entityDeleted);
 
-            //Check deleteEntity has been marked IsDeleted
-            Assert.True(_dbContext.Contacts.First(x => x == deleteEntity).IsDeleted);
-
-            ////Check deleteEntity not returned by GetByIdAsync
-            //Assert.Null(await _contactRepository.GetByIdAsync(deleteEntity.Id));
-
-            ////Check deleteEntity not returned by GetSingleAsync
-            //Assert.Null(await _contactRepository.GetSingleAsync(x => x.Id == deleteEntity.Id));
+            //Check entity has been marked IsDeleted
+            Assert.True(entityDeleted.IsDeleted);
         }
 
     }
