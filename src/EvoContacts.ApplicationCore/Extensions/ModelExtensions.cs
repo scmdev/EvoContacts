@@ -1,5 +1,6 @@
 ﻿using EvoContacts.ApplicationCore.Entities;
 using EvoContacts.ApplicationCore.Interfaces;
+using EvoContacts.ApplicationCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace EvoContacts.ApplicationCore.Extensions
         /// <param name="updateModel"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static bool MapUpdatesToEntity<TEntity>(this IBaseUpdateModel updateModel, ref TEntity entity)
+        public static bool MapUpdatesToEntity<TEntity>(this BaseUpdateModel updateModel, ref TEntity entity)
         {
             bool isEntityModified = false;
 

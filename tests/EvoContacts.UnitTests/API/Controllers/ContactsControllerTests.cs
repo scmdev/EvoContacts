@@ -17,14 +17,14 @@ namespace EvoContacts.UnitTests.Controllers
         private readonly Mock<IContactService> _mockContactService;
         private readonly Mock<ILogger<ContactsController>> _logger;
         
-        private readonly ContactsController _sut;
+        private readonly ContactsController _sutContactsController;
 
         public ContactsControllerTests()
         {
             _mockContactService = new Mock<IContactService>();
             _logger = new Mock<ILogger<ContactsController>>();
 
-            _sut = new ContactsController(
+            _sutContactsController = new ContactsController(
                 _mockContactService.Object, 
                 _logger.Object
                 );
@@ -35,10 +35,10 @@ namespace EvoContacts.UnitTests.Controllers
         [Fact]
         public async Task ReturnBadRequestObjectResultWhenInvalidModelState()
         {
-            _sut.ModelState.AddModelError("SomeProperty", "A test error");
+            _sutContactsController.ModelState.AddModelError("SomeProperty", "A test error");
 
             var contactCreate = new ContactCreate();
-            var result = await _sut.CreateContact(contactCreate);
+            var result = await _sutContactsController.CreateContact(contactCreate);
 
             Assert.IsType<BadRequestObjectResult>(result);
 

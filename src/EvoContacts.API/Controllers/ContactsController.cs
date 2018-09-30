@@ -57,7 +57,7 @@ namespace EvoContacts.API.Controllers
         {
             var contactsResult = await _contactService.GetPagedContacts(page, pageSize);
 
-            if (contactsResult.RequestFailed)
+            if (contactsResult.IsBadRequest)
             {
                 return BadRequest(contactsResult.ErrorMessage);
             }
@@ -83,7 +83,7 @@ namespace EvoContacts.API.Controllers
         {
             var contactResult = await _contactService.GetContact(contactId);
 
-            if (contactResult.RequestFailed)
+            if (contactResult.IsBadRequest)
             {
                 return BadRequest(contactResult.ErrorMessage);
             }
@@ -122,7 +122,7 @@ namespace EvoContacts.API.Controllers
 
             var contactResult = await _contactService.CreateContact(contactCreate);
 
-            if (contactResult.RequestFailed)
+            if (contactResult.IsBadRequest)
             {
                 return BadRequest(contactResult.ErrorMessage);
             }
@@ -166,7 +166,7 @@ namespace EvoContacts.API.Controllers
 
             var updateResult = await _contactService.UpdateContact(contactUpdate);
 
-            if (updateResult.RequestFailed)
+            if (updateResult.IsBadRequest)
             {
                 return BadRequest(updateResult.ErrorMessage);
             }
@@ -208,7 +208,7 @@ namespace EvoContacts.API.Controllers
 
             var updateStatusResult = await _contactService.UpdateContactStatus(contactUpdateStatus);
 
-            if (updateStatusResult.RequestFailed)
+            if (updateStatusResult.IsBadRequest)
             {
                 return BadRequest(updateStatusResult.ErrorMessage);
             }
@@ -240,7 +240,7 @@ namespace EvoContacts.API.Controllers
         {
             var deleteResult = await _contactService.DeleteContact(contactId, _claimsUser.UserId);
 
-            if (deleteResult.RequestFailed)
+            if (deleteResult.IsBadRequest)
             {
                 return BadRequest(deleteResult.ErrorMessage);
             }

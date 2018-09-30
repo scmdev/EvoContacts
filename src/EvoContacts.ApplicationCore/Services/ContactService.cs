@@ -35,6 +35,12 @@ namespace EvoContacts.ApplicationCore.Services
 
             try
             {
+                if (page < 1)
+                {
+                    result.ErrorMessage = ERROR_GET_CONTACTS_INVALID_PAGE_NUMBER;
+                    return result;
+                }
+
                 var contactEntitiesPagedList = await _contactRepository.GetPagedListAsync(page: page, pageSize: pageSize);
 
                 //Map Models.PagedListResult<Entities.Contact> to Models.PagedListResult<Models.Contact>
@@ -114,21 +120,21 @@ namespace EvoContacts.ApplicationCore.Services
 
             try
             {
-                //check Contact with same Email does not already exist
-                var checkEmailEntity = await _contactRepository.GetSingleAsync(x => x.Email == contactUpdate.Email);
-
-                if (checkEmailEntity != null && checkEmailEntity.Id != contactUpdate.Id)
-                {
-                    result.ErrorMessage = ERROR_UPDATE_CONTACT_DUPLICATE_EMAIL;
-                    return result;
-                }
-
                 //Get contactEntity using GetSingleAsync to avoid tracking
                 var contactEntity = await _contactRepository.GetSingleAsync(x => x.Id == contactUpdate.Id);
 
                 if (contactEntity == null)
                 {
                     result.Data = false; //result.Data = false => controller will return 404
+                    return result;
+                }
+
+                //check Contact with same Email does not already exist
+                var checkEmailEntity = await _contactRepository.GetSingleAsync(x => x.Email == contactUpdate.Email);
+
+                if (checkEmailEntity != null && checkEmailEntity.Id != contactUpdate.Id)
+                {
+                    result.ErrorMessage = ERROR_UPDATE_CONTACT_DUPLICATE_EMAIL;
                     return result;
                 }
 

@@ -13,7 +13,7 @@ namespace EvoContacts.ApplicationCore.Models
         public string ErrorMessage { get; set; }
 
         [JsonIgnore]
-        public bool RequestFailed { get { return !string.IsNullOrEmpty(ErrorMessage); } }
+        public bool IsBadRequest { get { return !string.IsNullOrEmpty(ErrorMessage); } }
     }
 
     public class Result<T> : Result

@@ -35,43 +35,14 @@ namespace EvoContacts.Infrastructure.Repositories
             return entity;
         }
 
-        public virtual async Task<T> GetByIdAsync(Guid id, params Expression<Func<T, object>>[] includes)
-        {
-            var queryableResultWithIncludes = includes
-                .Aggregate(_dbSet.Where(x => !x.IsDeleted).AsQueryable(),
-                    (current, include) => current.Include(include));
-            return await queryableResultWithIncludes.SingleOrDefaultAsync(x => x.Id == id);
-        }
-
         public async Task<T> GetSingleAsync(Expression<Func<T, bool>> criteria)
         {
             return await _dbSet.Where(x => !x.IsDeleted).FirstOrDefaultAsync(criteria);
         }
 
-        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> criteria, params Expression<Func<T, object>>[] includes)
-        {
-            var queryableResultWithIncludes = includes
-                .Aggregate(_dbSet.Where(x => !x.IsDeleted).AsQueryable(),
-                    (current, include) => current.Include(include));
-            return await queryableResultWithIncludes.FirstOrDefaultAsync(criteria);
-        }
-
         public async Task<List<T>> ListAllAsync()
         {
             return await _dbSet.Where(x => !x.IsDeleted).ToListAsync();
-        }
-
-        public async Task<List<T>> ListAsync(Expression<Func<T, bool>> criteria)
-        {
-            return await _dbSet.Where(x => !x.IsDeleted).Where(criteria).ToListAsync();
-        }
-
-        public async Task<List<T>> ListAsync(Expression<Func<T, bool>> criteria, params Expression<Func<T, object>>[] includes)
-        {
-            var queryableResultWithIncludes = includes
-                .Aggregate(_dbSet.Where(x => !x.IsDeleted).AsQueryable(),
-                    (current, include) => current.Include(include));
-            return await queryableResultWithIncludes.Where(criteria).ToListAsync();
         }
 
         public async Task<IPager<T>> GetPagedListAsync(int page, int pageSize)
@@ -83,34 +54,15 @@ namespace EvoContacts.Infrastructure.Repositories
             return list;
         }
 
-        public async Task<IPager<T>> GetPagedListAsync(Expression<Func<T, bool>> criteria, int page, int pageSize)
-        {
-            var queryableResult = _dbSet.Where(x => !x.IsDeleted).Where(criteria);
-
-            PagedList<T> list = await GetPagedListAsync(queryableResult, page, pageSize);
-
-            return list;
-        }
-
-        public async Task<IPager<T>> GetPagedListAsync(Expression<Func<T, bool>> criteria, int page, int pageSize, params Expression<Func<T, object>>[] includes)
-        {
-            var queryableResultWithIncludes = includes
-                .Aggregate(_dbSet.Where(x => !x.IsDeleted).AsQueryable(),
-                    (current, include) => current.Include(include));
-
-            PagedList<T> list = await GetPagedListAsync(queryableResultWithIncludes, page, pageSize);
-
-            return list;
-        }
-
         private async Task<PagedList<T>> GetPagedListAsync(IQueryable<T> query, int page, int pageSize,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var totalRecords = await query.CountAsync(cancellationToken).ConfigureAwait(false);
+
             var items = await query.Skip((page - 1) * pageSize)
                 .Take(pageSize).ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            var list = new PagedList<T>()
+            var pagedList = new PagedList<T>()
             {
                 Items = items,
                 Page = page,
@@ -118,17 +70,12 @@ namespace EvoContacts.Infrastructure.Repositories
                 TotalRecords = totalRecords
             };
 
-            return list;
+            return pagedList;
         }
 
         public async Task<int> CountAsync()
         {
             return await _dbSet.Where(x => !x.IsDeleted).CountAsync();
-        }
-
-        public async Task<int> CountAsync(Expression<Func<T, bool>> criteria)
-        {
-            return await _dbSet.Where(x => !x.IsDeleted).CountAsync(criteria);
         }
 
         public async Task<bool> AddAsync(T entity)

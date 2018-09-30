@@ -26,6 +26,8 @@ namespace EvoContacts.ApplicationCore.Services
 
         public const string ERROR_UNSPECIFIED = "An error has occurred.";
 
+        public const string ERROR_GET_CONTACTS_INVALID_PAGE_NUMBER = "Invalid page number requested.";
+
         public const string ERROR_CREATE_CONTACT_DUPLICATE_EMAIL = "Create contact failed as a contact with this email already exists.";
 
         public const string ERROR_UPDATE_CONTACT_DUPLICATE_EMAIL = "Update contact failed as another contact with this email already exists.";

@@ -41,13 +41,13 @@ namespace EvoContacts.ApplicationCore.Models
         public Guid Id { get; set; }
     }
 
-    public class BaseCreateModel : IBaseCreateModel
+    public class BaseCreateModel
     {
         [JsonIgnore]
         public Guid? CreatedUserId { get; set; }
     }
 
-    public class BaseUpdateModel : IBaseUpdateModel
+    public class BaseUpdateModel
     {
         [JsonIgnore]
         public Guid? UpdatedUserId { get; set; }
