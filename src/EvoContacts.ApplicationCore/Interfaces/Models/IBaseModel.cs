@@ -6,11 +6,20 @@ using System.Threading.Tasks;
 
 namespace EvoContacts.ApplicationCore.Interfaces
 {
+    //public interface IBaseGetModel
+    //{
+    //    Guid? CreatedUserId { get; set; }
+    //    DateTimeOffset? CreatedDateTimeOffset { get; set; }
+
+    //    Guid? UpdatedUserId { get; set; }
+    //    DateTimeOffset? UpdatedDateTimeOffset { get; set; }
+
+    //    Guid Id { get; set; }
+    //}
+
     public interface IBaseCreateModel
     {
         Guid? CreatedUserId { get; set; }
-
-        Guid Id { get; set; }
     }
 
     public interface IBaseUpdateModel

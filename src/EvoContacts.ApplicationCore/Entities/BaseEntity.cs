@@ -12,8 +12,6 @@ namespace EvoContacts.ApplicationCore.Entities
         public BaseEntity()
         {
             Id = Guid.NewGuid();
-
-            CreatedDateTimeOffset = DateTimeOffset.UtcNow;
         }
 
         [Key]

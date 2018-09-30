@@ -12,9 +12,11 @@ namespace EvoContacts.ApplicationCore.Interfaces
 
         Task<Models.PagedListResult<Models.Contact>> GetPagedContacts(int page = 1, int pageSize = 20);
         Task<Models.Result<Models.Contact>> GetContact(Guid contactId);
+
         Task<Models.Result<Models.Contact>> CreateContact(Models.ContactCreate contactCreateModel);
         Task<Models.Result<bool?>> UpdateContact(Models.ContactUpdate contactUpdate);
-        Task<Models.Result<bool?>> DeleteContact(Guid contactId);
+        Task<Models.Result<bool?>> UpdateContactStatus(ContactUpdateStatus contactUpdateStatus);
+        Task<Models.Result<bool?>> DeleteContact(Guid contactId, Guid deletedUserId);
 
         #endregion
 

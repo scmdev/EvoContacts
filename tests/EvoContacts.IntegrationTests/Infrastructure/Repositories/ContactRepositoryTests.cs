@@ -165,7 +165,10 @@ namespace EvoContacts.IntegrationTests.Repositories
         {
             var deleteEntity = _dbContext.Contacts.Where(x => !x.IsDeleted).Last();
 
-            Assert.True(await _contactRepository.DeleteAsync(deleteEntity.Id));
+            //TBC: Must add TestUser user
+            var deletedUserId = Guid.NewGuid();
+
+            Assert.True(await _contactRepository.DeleteAsync(deleteEntity.Id, deletedUserId));
 
             var existingContacts = _dbContext.Contacts.Where(x => !x.IsDeleted).ToList();
 

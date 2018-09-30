@@ -17,7 +17,9 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,13 +47,13 @@ namespace EvoContacts.API
 
         public void ConfigureLocalServices(IServiceCollection services)
         {
-            ConfigureProductionServices(services);
-            //ConfigureTestingServices(services);
+            //ConfigureProductionServices(services); // use real database
+            ConfigureTestingServices(services); // use in-memory database
         }
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
-            ConfigureProductionServices(services);
+            ConfigureProductionServices(services); // use real database
         }
 
         public void ConfigureTestingServices(IServiceCollection services)
@@ -106,7 +108,24 @@ namespace EvoContacts.API
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "EvoContacts.API", Version = "v1" });
+                c.SwaggerDoc("v1", new Info
+                {
+                    Version = "v1",
+                    Title = "EvoContacts.API",
+                    Description = "A simple ASP.NET Core Web API for managing basic Contacts.",
+                    TermsOfService = "None",
+                    Contact = new Contact
+                    {
+                        Name = "Stephen Murphy",
+                        Email = "stephencliftonmurphy@gmail.com",
+                        Url = "https://www.linkedin.com/in/stephen-murphy-63074816b"
+                    }
+                });
+
+                // Set the comments path for the Swagger JSON and UI as defined in EvoContacts.API => Properties => Build => Output => XML Documentation file
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, "EvoContacts.API.xml");
+                c.IncludeXmlComments(xmlPath);
+                c.DescribeAllEnumsAsStrings();
             });
 
             _services = services;

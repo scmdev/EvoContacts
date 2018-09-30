@@ -133,6 +133,7 @@ namespace EvoContacts.Infrastructure.Repositories
 
         public async Task<bool> AddAsync(T entity)
         {
+            entity.CreatedDateTimeOffset = DateTimeOffset.UtcNow;
             _dbContext.Set<T>().Add(entity);
 
             return await _dbContext.SaveChangesAsync() > 0;
@@ -140,6 +141,7 @@ namespace EvoContacts.Infrastructure.Repositories
 
         public async Task<bool> UpdateAsync(T entity)
         {
+            entity.UpdatedDateTimeOffset = DateTimeOffset.UtcNow;
             _dbContext.Set<T>().Update(entity);
 
             return await _dbContext.SaveChangesAsync() > 0;
@@ -164,7 +166,6 @@ namespace EvoContacts.Infrastructure.Repositories
 
             return deleted;
         }
-
 
     }
 }
