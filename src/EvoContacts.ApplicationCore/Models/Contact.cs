@@ -9,6 +9,7 @@
  */
 
 using EvoContacts.ApplicationCore.Enums;
+using EvoContacts.ApplicationCore.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -280,6 +281,17 @@ namespace EvoContacts.ApplicationCore.Models
         [DataMember(Name = "PhoneNumber")]
         public string PhoneNumber { get; set; }
 
+        /// <summary>
+        /// Gets or Sets ContactStatus
+        /// </summary>
+        [Required]
+        [DataMember(Name = "ContactStatus")]
+        public ContactStatusEnum ContactStatus { get; set; }
+    }
+
+    [DataContract]
+    public partial class ContactUpdateStatus : BaseUpdateModel
+    {
         /// <summary>
         /// Gets or Sets ContactStatus
         /// </summary>

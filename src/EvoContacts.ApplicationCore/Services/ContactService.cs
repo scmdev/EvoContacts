@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using EvoContacts.ApplicationCore.Enums;
 using EvoContacts.ApplicationCore.Extensions;
 using EvoContacts.ApplicationCore.Interfaces;
+using EvoContacts.ApplicationCore.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -81,9 +83,6 @@ namespace EvoContacts.ApplicationCore.Services
 
             try
             {
-                //TBC: Must add ClaimUser claimUser
-                var createdUserId = Guid.NewGuid(); //var createdUserId = claimUser.UserId;
-
                 //check Contact with same Email does not already exist
                 var checkEmailEntity = await _contactRepository.GetSingleAsync(x => x.Email == contactCreate.Email);
 
@@ -92,8 +91,6 @@ namespace EvoContacts.ApplicationCore.Services
                     result.ErrorMessage = ERROR_CREATE_CONTACT_DUPLICATE_EMAIL;
                     return result;
                 }
-
-                contactCreate.CreatedUserId = createdUserId;
 
                 //Create new contactEntity by mapping contactCreate to Entities.Contact
                 var contactEntity = _mapper.Map<Entities.Contact>(contactCreate);
@@ -117,9 +114,6 @@ namespace EvoContacts.ApplicationCore.Services
 
             try
             {
-                //TBC: Must add ClaimUser claimUser
-                var updatedUserId = Guid.NewGuid(); //var createdUserId = claimUser.UserId;
-
                 //check Contact with same Email does not already exist
                 var checkEmailEntity = await _contactRepository.GetSingleAsync(x => x.Email == contactUpdate.Email);
 
@@ -138,10 +132,8 @@ namespace EvoContacts.ApplicationCore.Services
                     return result;
                 }
 
-                contactUpdate.UpdatedUserId = updatedUserId;
-
                 //Check/Update contactEntity properties as per contactUpdate provided
-                if (!contactUpdate.MapToEntity(ref contactEntity))
+                if (!contactUpdate.MapUpdatesToEntity(ref contactEntity))
                 {
                     result.ErrorMessage = ERROR_UPDATE_CONTACT_NO_CHANGES_DETECTED;
                     return result;
@@ -157,15 +149,44 @@ namespace EvoContacts.ApplicationCore.Services
             return result;
         }
 
-        public async Task<Models.Result<bool?>> DeleteContact(Guid contactId)
+        public async Task<Models.Result<bool?>> UpdateContactStatus(ContactUpdateStatus contactUpdateStatus)
         {
             var result = new Models.Result<bool?>();
 
             try
             {
-                //TBC: Must add ClaimUser claimUser
-                var deletedUserId = Guid.NewGuid();
+                //Get contactEntity using GetSingleAsync to avoid tracking
+                var contactEntity = await _contactRepository.GetSingleAsync(x => x.Id == contactUpdateStatus.Id);
 
+                if (contactEntity == null)
+                {
+                    result.Data = false; //result.Data = false => controller will return 404
+                    return result;
+                }
+
+                //Check/Update contactEntity properties as per contactUpdateStatus provided
+                if (!contactUpdateStatus.MapUpdatesToEntity(ref contactEntity))
+                {
+                    result.ErrorMessage = ERROR_UPDATE_CONTACT_NO_CHANGES_DETECTED;
+                    return result;
+                }
+
+                result.Data = await _contactRepository.UpdateAsync(contactEntity);
+            }
+            catch (Exception e)
+            {
+                result.ErrorMessage = LogError(e, "UpdateContactStatus", new object[] { contactUpdateStatus });
+            }
+
+            return result;
+        }
+
+        public async Task<Models.Result<bool?>> DeleteContact(Guid contactId, Guid deletedUserId)
+        {
+            var result = new Models.Result<bool?>();
+
+            try
+            {
                 result.Data = await _contactRepository.DeleteAsync(contactId, deletedUserId);
             }
             catch (Exception e)
