@@ -12,6 +12,7 @@ namespace EvoContacts.ApplicationCore.Interfaces
 
         int Page { get; set; }
         int PageSize { get; set; }
+        int NumItems { get; } //could be less than PageSize if last page
         int TotalRecords { get; set; }
         int TotalPages { get; }
     }

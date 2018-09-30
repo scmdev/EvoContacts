@@ -28,7 +28,7 @@ namespace EvoContacts.ApplicationCore.Interfaces
 
         Task<bool> AddAsync(T entity);
         Task<bool> UpdateAsync(T entity);
-        Task<bool> DeleteAsync(Guid id, Guid deletedUserId);
+        Task<bool> DeleteAsync(Guid id, Guid? deletedUserId = null);
 
     }
 }

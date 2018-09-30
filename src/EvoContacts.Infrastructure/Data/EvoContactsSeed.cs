@@ -38,9 +38,7 @@ namespace EvoContacts.Infrastructure.Data
                 {
                     logger.LogInformation("Seed Contacts started.");
 
-                    dbContext.Contacts.AddRange(
-                        seedContacts
-                    );
+                    dbContext.Contacts.AddRange(seedContacts);
                     await dbContext.SaveChangesAsync();
 
                     logger.LogInformation("Seed Contacts completed.");

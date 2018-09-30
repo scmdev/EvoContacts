@@ -47,6 +47,7 @@ namespace EvoContacts.ApplicationCore.Models
 
         public int Page { get; set; }
         public int PageSize { get; set; }
+        public int NumItems { get { return Items.Count; } } //could be less than PageSize if last page
         public int TotalRecords { get; set; }
         public int TotalPages { get { return (TotalRecords + PageSize - 1) / PageSize; } }
     }

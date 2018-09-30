@@ -10,7 +10,6 @@ namespace EvoContacts.ApplicationCore.Interfaces
     {
         #region CONTACT
 
-        Task<ListResult<Models.Contact>> GetAllContacts();
         Task<Models.PagedListResult<Models.Contact>> GetPagedContacts(int page = 1, int pageSize = 20);
         Task<Models.Result<Models.Contact>> GetContact(Guid contactId);
         Task<Models.Result<Models.Contact>> CreateContact(Models.ContactCreate contactCreateModel);

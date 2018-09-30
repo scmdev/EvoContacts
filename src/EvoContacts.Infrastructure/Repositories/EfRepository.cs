@@ -145,7 +145,7 @@ namespace EvoContacts.Infrastructure.Repositories
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> DeleteAsync(Guid id, Guid deletedUserId)
+        public async Task<bool> DeleteAsync(Guid id, Guid? deletedUserId = null)
         {
             bool deleted = false;
 

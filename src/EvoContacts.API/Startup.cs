@@ -6,6 +6,7 @@ using EvoContacts.Infrastructure.Data;
 using EvoContacts.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace EvoContacts.API
@@ -25,6 +27,7 @@ namespace EvoContacts.API
     {
         public IConfiguration Configuration { get; }
 
+        private IServiceCollection _services;
         private readonly ILoggerFactory _loggerFactory;
 
         public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -40,16 +43,44 @@ namespace EvoContacts.API
             Configuration = builder.Build();
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureLocalServices(IServiceCollection services)
         {
-            // SQL Server Config
+            ConfigureProductionServices(services);
+            //ConfigureTestingServices(services);
+        }
+
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            ConfigureProductionServices(services);
+        }
+
+        public void ConfigureTestingServices(IServiceCollection services)
+        {
+            // use in-memory database
+            services.AddDbContext<EvoContactsDbContext>(options =>
+            {
+                options.UseInMemoryDatabase("EvoContacts");
+                options.UseLoggerFactory(_loggerFactory);
+            });
+
+            ConfigureServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            // use real database
             services.AddDbContext<EvoContactsDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-                //options.UseInMemoryDatabase("EvoContacts");
-                //options.UseLoggerFactory(_loggerFactory);
+                options.UseLoggerFactory(_loggerFactory);
             });
+
+            ConfigureServices(services);
+        }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
             services.AddScoped<IContactRepository, ContactRepository>();
@@ -67,15 +98,18 @@ namespace EvoContacts.API
 
             services.AddSingleton(mapper);
 
+            // Add Application Insights
+            services.AddApplicationInsightsTelemetry(Configuration);
+
             // Add MVC
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest); //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1); 
-
-            services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "EvoContacts.API", Version = "v1" });
             });
+
+            _services = services;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,6 +122,7 @@ namespace EvoContacts.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                ListAllRegisteredServices(app);
             }
             else
             {
@@ -112,6 +147,28 @@ namespace EvoContacts.API
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
             });
+        }
+
+        private void ListAllRegisteredServices(IApplicationBuilder app)
+        {
+            app.Map("/allservices", builder => builder.Run(async context =>
+            {
+                var sb = new StringBuilder();
+                sb.Append("<h1>All Services</h1>");
+                sb.Append("<table><thead>");
+                sb.Append("<tr><th>Type</th><th>Lifetime</th><th>Instance</th></tr>");
+                sb.Append("</thead><tbody>");
+                foreach (var svc in _services)
+                {
+                    sb.Append("<tr>");
+                    sb.Append($"<td>{svc.ServiceType.FullName}</td>");
+                    sb.Append($"<td>{svc.Lifetime}</td>");
+                    sb.Append($"<td>{svc.ImplementationType?.FullName}</td>");
+                    sb.Append("</tr>");
+                }
+                sb.Append("</tbody></table>");
+                await context.Response.WriteAsync(sb.ToString());
+            }));
         }
     }
 }

@@ -27,24 +27,6 @@ namespace EvoContacts.ApplicationCore.Services
 
         #region CONTACT
 
-        public async Task<Models.ListResult<Models.Contact>> GetAllContacts()
-        {
-            var result = new Models.ListResult<Models.Contact>();
-
-            try
-            {
-                var contactEntitiesList = await _contactRepository.ListAllAsync();
-
-                result.Items = _mapper.Map<List<Models.Contact>>(contactEntitiesList);
-            }
-            catch (Exception e)
-            {
-                result.ErrorMessage = LogError(e, "GetAllContacts");
-            }
-
-            return result;
-        }
-
         public async Task<Models.PagedListResult<Models.Contact>> GetPagedContacts(int page = 1, int pageSize = 20)
         {
             var result = new Models.PagedListResult<Models.Contact>(page, pageSize);

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -14,11 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\EvoContacts.API\EvoContacts.API.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ApplicationCore\Services\" />
+    <ProjectReference Include="..\..\src\EvoContacts.Infrastructure\EvoContacts.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
