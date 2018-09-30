@@ -4,6 +4,7 @@ using EvoContacts.ApplicationCore.Mapping;
 using EvoContacts.ApplicationCore.Services;
 using EvoContacts.Infrastructure.Data;
 using EvoContacts.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,9 +15,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,10 +87,31 @@ namespace EvoContacts.API
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
             services.AddScoped<IContactRepository, ContactRepository>();
-
             services.AddScoped<IContactService, ContactService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddSingleton(Configuration);
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"])),
+                        RequireSignedTokens = true,
+                        RequireExpirationTime = true,
+                        ValidateLifetime = true,
+                        ValidateAudience = true,
+                        ValidateIssuer = true,
+                        ValidAudience = Configuration["JWT:Audience"],
+                        ValidIssuer = Configuration["JWT:Issuer"]
+                    };
+                });
 
             // add Auto Mapper
             var config = new MapperConfiguration(cfg =>
@@ -107,6 +131,9 @@ namespace EvoContacts.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "EvoContacts.API", Version = "v1" });
+
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "header", Description = "Please enter JWT token as follows without quotations: \"Bearer {Token}\"", Name = "Authorization", Type = "apiKey" });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> { { "Bearer", Enumerable.Empty<string>() } });
             });
 
             _services = services;
@@ -129,6 +156,8 @@ namespace EvoContacts.API
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
+
+            app.UseAuthentication();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();

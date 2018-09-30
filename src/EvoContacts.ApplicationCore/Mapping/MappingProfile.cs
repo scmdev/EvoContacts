@@ -11,6 +11,8 @@ namespace EvoContacts.ApplicationCore.Mapping
         {
             CreateMap<Entities.Contact, Models.Contact>();
             CreateMap<Models.ContactCreate, Entities.Contact>();
+            CreateMap<Entities.User, Models.User>();
+            CreateMap<Models.UserCreate, Entities.User>();
         }
     }
 

@@ -32,5 +32,11 @@ namespace EvoContacts.ApplicationCore.Services
 
         public const string ERROR_UPDATE_CONTACT_NO_CHANGES_DETECTED = "Update contact failed as no changes were detected.";
 
+        public const string ERROR_CREATE_USER_DUPLICATE_USERNAME = "Create user failed as a user with this username already exists.";
+
+        public const string ERROR_UPDATE_USER_DUPLICATE_USERNAME = "Update user failed as another user with this username already exists.";
+
+        public const string ERROR_UPDATE_USER_NO_CHANGES_DETECTED = "Update user failed as no changes were detected.";
+
     }
 }

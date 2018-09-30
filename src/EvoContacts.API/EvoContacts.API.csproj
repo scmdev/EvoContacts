@@ -11,6 +11,9 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.2.6" />
+    <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="4.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="3.0.0" />
   </ItemGroup>

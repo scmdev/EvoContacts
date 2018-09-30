@@ -10,19 +10,11 @@
 
 using EvoContacts.ApplicationCore.Interfaces;
 using EvoContacts.ApplicationCore.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace EvoContacts.API.Controllers
@@ -30,6 +22,8 @@ namespace EvoContacts.API.Controllers
     /// <summary>
     /// 
     /// </summary>
+    [Authorize]
+    [Produces("application/json")]
     public class ContactsController : Controller
     {
         private readonly IContactService _contactService;
