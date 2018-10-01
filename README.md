@@ -22,9 +22,39 @@ A simple ASP.NET Core Web API for managing basic Contacts.
 
 ## Architecture:
 
-- Onion Architecture
+- Full architecture with separation of concerns, SOLID and Clean Code
 - Domain Driven Design (Layers and Domain Model Pattern)
 - Repository and Generic Repository
+
+## Projects included in solution:
+
+- src/**EvoContacts.API**
+- src/**EvoContacts.ApplicationCore**
+- src/**EvoContacts.Infrastructure**
+- tests/**EvoContacts.IntegrationTests**
+- tests/**EvoContacts.UnitTests**
+
+## Steps to run the application locally:
+
+1. Clone or download the project from GitHub.
+2. Open EvoContacts.sln in Visual Studio 2017.
+3. Build Solution.
+4. Select StartUp Project = EvoContacts.API.
+5. Select Debug Profile = IIS Express.
+6. Click Start Debugging or hit F5.
+
+Note that the application runs using an in-memory database by default. 
+
+If you wish to use a real SQL Server database complete the following steps:
+
+1. Uncomment **EvoContacts.API\Startup.cs line 53** ConfigureProductionServices(services);
+2. Comment out **EvoContacts.API\Startup.cs line 54** ConfigureTestingServices(services);
+3. Configure ConnectionString "DefaultConnection" in **EvoContacts.API\appsettings.json line 6**
+4. Configure ConnectionString "DefaultConnection" in **EvoContacts.API\appsettings.Development.json line 6**
+5. Open Package Manager Console window.
+6. Select Default project = "EvoContacts.Infrastructure".
+7. Type "Update-Database" without quotes and hit enter to apply migrations to the configured database.
+8. Re-run the application as detailed above.
 
 ## About:
 
