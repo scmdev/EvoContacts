@@ -56,7 +56,8 @@ namespace EvoContacts.API
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
-            ConfigureProductionServices(services); // use real database
+            //ConfigureProductionServices(services); // use real database
+            ConfigureTestingServices(services); // use in-memory database
         }
 
         public void ConfigureTestingServices(IServiceCollection services)
