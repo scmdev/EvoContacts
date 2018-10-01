@@ -94,6 +94,7 @@ namespace EvoContacts.API
 
             services.AddSingleton(Configuration);
 
+            // add JWT Authentication
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -120,7 +121,6 @@ namespace EvoContacts.API
                 cfg.AddProfile(new MappingProfile());
             });
             var mapper = config.CreateMapper();
-
             services.AddSingleton(mapper);
 
             // Add Application Insights
@@ -129,6 +129,7 @@ namespace EvoContacts.API
             // Add MVC
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest); //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1); 
 
+            // Add Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info
