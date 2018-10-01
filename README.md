@@ -50,8 +50,8 @@ Note that the application runs using an in-memory database by default.
 
 If you wish to use a real SQL Server database complete the following steps:
 
-1. Uncomment **EvoContacts.API\Startup.cs line 53** ConfigureProductionServices(services);
-2. Comment out **EvoContacts.API\Startup.cs line 54** ConfigureTestingServices(services);
+1. Uncomment **EvoContacts.API\Startup.cs line 59** ConfigureProductionServices(services);
+2. Comment out **EvoContacts.API\Startup.cs line 60** ConfigureTestingServices(services);
 3. Configure ConnectionString "DefaultConnection" in **EvoContacts.API\appsettings.json line 6**
 4. Configure ConnectionString "DefaultConnection" in **EvoContacts.API\appsettings.Development.json line 6**
 5. Open **Package Manager Console** window.
