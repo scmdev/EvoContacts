@@ -25,3 +25,7 @@ A simple ASP.NET Core Web API for managing basic Contacts.
 - Onion Architecture
 - Domain Driven Design (Layers and Domain Model Pattern)
 - Repository and Generic Repository
+
+## About:
+
+This project was developed by [Stephen Murphy](https://www.linkedin.com/in/stephen-murphy-63074816b).
