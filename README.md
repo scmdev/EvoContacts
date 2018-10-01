@@ -15,7 +15,6 @@ A simple ASP.NET Core Web API for managing basic Contacts.
 - Entity Framework Core 2.1
 - .NET Core Native DI
 - AutoMapper
-- MediatR
 - Swagger UI
 - xUnit
 - Moq
@@ -23,7 +22,6 @@ A simple ASP.NET Core Web API for managing basic Contacts.
 ## Architecture:
 
 - Full architecture with separation of concerns, SOLID and Clean Code
-- Domain Driven Design (Layers and Domain Model Pattern)
 - Repository and Generic Repository
 
 ## Projects included in solution:
