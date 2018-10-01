@@ -41,7 +41,10 @@ A simple ASP.NET Core Web API for managing basic Contacts.
 3. Build Solution.
 4. Select StartUp Project = EvoContacts.API.
 5. Select Debug Profile = IIS Express.
-6. Click Start Debugging or hit F5.
+6. Click Start Debugging or hit F5. Application will run and display Swagger UI.
+7. Use the **Auth/token** endpoint to request an OAuth authorization token.
+8. Click the "Authorize" button at the top of the UI. Enter "Bearer {Token}" into the Value field (without quotations and substituting the token you just received). Click "Authorize" to save and close the dialog.
+9. You should now be authorized to use all other endpoints.
 
 Note that the application runs using an in-memory database by default. 
 
