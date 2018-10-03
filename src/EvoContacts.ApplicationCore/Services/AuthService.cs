@@ -1,7 +1,6 @@
-﻿using ApplicationCore.Models;
-using AutoMapper;
-using EvoContacts.ApplicationCore.Extensions;
+﻿using AutoMapper;
 using EvoContacts.ApplicationCore.Interfaces;
+using EvoContacts.ApplicationCore.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;

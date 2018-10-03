@@ -1,4 +1,3 @@
-using ApplicationCore.Models;
 using EvoContacts.ApplicationCore.Interfaces;
 using EvoContacts.ApplicationCore.Models;
 using Microsoft.AspNetCore.Mvc;

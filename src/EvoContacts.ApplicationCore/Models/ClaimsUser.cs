@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace ApplicationCore.Models
+namespace EvoContacts.ApplicationCore.Models
 {
     public class ClaimsUser
     {
